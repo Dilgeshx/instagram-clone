@@ -97,4 +97,19 @@ a {
   cursor: pointer;
   text-decoration: underline;
 }
+@media (max-width: 600px) {
+  .modal-content {
+    min-width: 90vw;
+    padding: 16px 4px 8px 4px;
+    border-radius: 8px;
+  }
+  .add-post {
+    padding: 8px 2px;
+  }
+  .auth-box {
+    margin: 32px auto;
+    padding: 16px 8px;
+    border-radius: 8px;
+  }
+}
 </style>

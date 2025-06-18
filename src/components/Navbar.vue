@@ -132,7 +132,7 @@ export default {
   background-size: 800% 800%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradientMove 64m  ease-in-out infinite;
+  animation: gradientMove 16s  ease-in-out infinite;
 }
 @keyframes gradientMove {
   0% { background-position: 0% 50%; }
@@ -158,14 +158,22 @@ export default {
 }
 @media (max-width: 600px) {
   .navbar {
-    padding: 0 12px;
-    height: 54px;
+    padding: 0 8px;
+    height: 48px;
   }
   .logo-text {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    width: 6ch;
+    min-width: 2ch;
+  }
+  .logo-stack {
+    height: 1.5em;
   }
   .navbar-right {
-    gap: 16px;
+    gap: 10px;
+  }
+  .icon-btn {
+    padding: 2px;
   }
 }
 body.dark-mode .logo-text {

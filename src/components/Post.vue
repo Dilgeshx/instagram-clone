@@ -3,7 +3,7 @@
     <div class="post-header">
       <span class="username">{{ username }}</span>
     </div>
-    <img :src="image" alt="Post image" class="post-image" />
+    <img v-if="image" :src="image" alt="Post image" class="post-image" />
     <div class="caption">{{ caption }}</div>
   </div>
 </template>
@@ -48,5 +48,16 @@ body.dark-mode .post {
 body.dark-mode .caption,
 body.dark-mode .username {
   color: #f1f1f1;
+}
+
+@media (max-width: 600px) {
+  .post-image {
+    max-width: 100vw;
+    height: auto;
+  }
+  button,
+  .icon-btn {
+    font-size: 1rem;
+  }
 }
 </style>

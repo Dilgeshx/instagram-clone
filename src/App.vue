@@ -22,19 +22,29 @@
                 @input="filterPosts"
                 autofocus
               />
-              <button class="close-btn" @click="closeModal">×</button>
+              <button class="close-btn" @click="closeModal" aria-label="Kapat">×</button>
             </div>
           </template>
           <template v-else-if="activeModal === 'dm'">
             <div style="padding:24px;">Mesaj kutusu buraya gelecek.</div>
-            <button class="close-btn" @click="closeModal">×</button>
+            <button class="close-btn" @click="closeModal" aria-label="Kapat">×</button>
           </template>
           <template v-else-if="activeModal === 'notifications'">
-            <div style="padding:24px;">Bildirimler buraya gelecek.</div>
-            <button class="close-btn" @click="closeModal">×</button>
+            <div class="notifications-modal">
+              <div v-if="notifications.length === 0" class="empty-notification">
+                Henüz bir bildirim yok.
+              </div>
+              <ul v-else>
+                <li v-for="(notif, i) in notifications" :key="i">
+                  {{ notif }}
+                </li>
+              </ul>
+              <button class="close-btn" @click="closeModal" aria-label="Kapat">×</button>
+            </div>
           </template>
         </div>
       </div>
+      <PostBox :currentUser="currentUser" @add-post="handleAddPost" />
       <main>
         <InstagramPost
           v-for="post in filteredPosts"
@@ -53,9 +63,10 @@ import AppNavbar from './components/Navbar.vue'
 import LoginRegister from './components/LoginRegister.vue'
 import InstagramPost from './components/Post.vue'
 import AddPost from './components/AddPost.vue'
+import PostBox from './components/PostBox.vue'
 
 export default {
-  components: { AppNavbar, LoginRegister, InstagramPost, AddPost },
+  components: { AppNavbar, LoginRegister, InstagramPost, AddPost, PostBox },
   data() {
     return {
       isDark: false,
@@ -63,7 +74,8 @@ export default {
       activeModal: null,
       searchQuery: '',
       posts: JSON.parse(localStorage.getItem('posts') || '[]'),
-      filteredPosts: []
+      filteredPosts: [],
+      notifications: []
     }
   },
   created() {
@@ -100,6 +112,9 @@ export default {
     handleAddPostAndClose(newPost) {
       this.posts.unshift(newPost)
       this.closeModal()
+    },
+    handleAddPost(newPost) {
+      this.posts.unshift(newPost)
     },
     filterPosts() {
       const q = this.searchQuery.trim().toLowerCase()
@@ -213,16 +228,22 @@ body.dark-mode .search-bar {
   background: #0077c2;
 }
 .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 16px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 2.6rem;
   color: #888;
   cursor: pointer;
-  padding: 0 8px;
+  z-index: 10;
+  transition: color 0.18s;
   line-height: 1;
+  padding: 0 8px;
 }
 .close-btn:hover {
-  color: #0095f6;
+  color: #ff1744;
+  background: none;
 }
 /* Modal stilleri */
 .modal-overlay {
@@ -338,5 +359,32 @@ body.dark-mode .search-bar-modal {
 }
 body.dark-mode .logo-text {
   color: #f1f1f1;
+}
+@media (max-width: 600px) {
+  .container {
+    max-width: 100vw;
+    margin: 0;
+    padding: 8px 2px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .post {
+    border-radius: 6px;
+    padding: 0;
+  }
+}
+.notifications-modal {
+  min-width: 240px;
+  min-height: 80px;
+  padding: 24px 8px 8px 8px;
+  text-align: center;
+}
+.empty-notification {
+  color: #888;
+  font-size: 1.1rem;
+  padding: 24px 0;
+}
+body.dark-mode .empty-notification {
+  color: #aaa;
 }
 </style>
