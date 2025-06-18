@@ -1,25 +1,44 @@
 <template>
   <nav class="navbar">
     <div class="navbar-left">
-      <span class="logo-text">dilgestagram</span>
+      <span class="logo-text" @mouseenter="hover = true" @mouseleave="hover = false">
+        <span class="logo-stack">
+          <span
+            class="logo-fade logo-gradient"
+            :class="{ visible: !hover }"
+            aria-hidden="hover"
+          >ds</span>
+          <span
+            class="logo-fade"
+            :class="{ visible: hover }"
+            aria-hidden="!hover"
+          >dilgestagram</span>
+        </span>
+      </span>
     </div>
     <div class="navbar-right">
-      <button class="icon-btn" title="Ara" @click="$emit('toggle-search')">
+      <button class="icon-btn" title="Ara" @click="$emit('open-modal', 'search')">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="7"/>
           <line x1="18" y1="18" x2="15.5" y2="15.5"/>
         </svg>
       </button>
-      <button class="icon-btn" title="Bildirimler">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
-          <path d="M13.73 21a2 2 0 01-3.46 0"/>
+      <button class="icon-btn" title="Gönderi Ekle" @click="$emit('open-modal', 'addPost')">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
       </button>
-      <button class="icon-btn" title="DM">
+      <button class="icon-btn" title="DM" @click="$emit('open-modal', 'dm')">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="5" width="18" height="14" rx="2" />
           <polyline points="3 7 12 13 21 7" />
+        </svg>
+      </button>
+      <button class="icon-btn" title="Bildirimler" @click="$emit('open-modal', 'notifications')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 01-3.46 0"/>
         </svg>
       </button>
       <button class="icon-btn" title="Dark Mode" @click="$emit('toggle-dark')">
@@ -40,6 +59,11 @@ export default {
   name: 'AppNavbar',
   props: {
     isDark: Boolean
+  },
+  data() {
+    return {
+      hover: false
+    }
   }
 }
 </script>
@@ -62,11 +86,58 @@ export default {
   z-index: 10;
 }
 .logo-text {
+  display: inline-block;
+  width: 13ch; 
+  min-width: 2.5ch;
+  position: relative;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: #222;
   letter-spacing: 1px;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: color 0.2s;
+  overflow: hidden;
+
+  line-height: 1.2;
+}
+.logo-stack {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 2.4em; 
+}
+.logo-fade {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.98);
+  transition: opacity 0.35s cubic-bezier(.4,2,.6,1), transform 0.35s cubic-bezier(.4,2,.6,1);
+  white-space: nowrap;
+  pointer-events: none;
+  text-align: left;
+}
+.logo-fade.visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+  pointer-events: auto;
+}
+
+.logo-gradient {
+  background: linear-gradient(270deg, #ff6a00, #ee0979, #00c3ff, #43e97b, #ff6a00);
+  background-size: 800% 800%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 64m  ease-in-out infinite;
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 .navbar-right {
   display: flex;
@@ -96,5 +167,8 @@ export default {
   .navbar-right {
     gap: 16px;
   }
+}
+body.dark-mode .logo-text {
+  color: #f1f1f1;
 }
 </style>

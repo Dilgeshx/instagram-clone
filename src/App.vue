@@ -1,17 +1,39 @@
 <template>
   <div>
-    <AppNavbar v-if="currentUser" @toggle-search="showSearch = !showSearch" :isDark="isDark" @toggle-dark="toggleDark" />
+    <AppNavbar
+      :isDark="isDark"
+      @toggle-dark="toggleDark"
+      @open-modal="openModal"
+      v-if="currentUser"
+    />
     <LoginRegister v-else @login="onLogin" />
     <div v-if="currentUser" class="container">
-      <div v-if="showSearch" class="search-bar">
-        <input
-          v-model="searchQuery"
-          placeholder="Ara"
-          @input="filterPosts"
-          @keyup.esc="clearSearch"
-          autofocus
-        />
-        <button class="close-btn" @click="clearSearch" title="Kapat">×</button>
+      <!-- Modal -->
+      <div v-if="activeModal" class="modal-overlay" @click.self="closeModal">
+        <div class="modal-content">
+          <template v-if="activeModal === 'addPost'">
+            <AddPost :currentUser="currentUser" @add-post="handleAddPostAndClose" />
+          </template>
+          <template v-else-if="activeModal === 'search'">
+            <div class="search-bar-modal">
+              <input
+                v-model="searchQuery"
+                placeholder="Kullanıcı adına göre ara..."
+                @input="filterPosts"
+                autofocus
+              />
+              <button class="close-btn" @click="closeModal">×</button>
+            </div>
+          </template>
+          <template v-else-if="activeModal === 'dm'">
+            <div style="padding:24px;">Mesaj kutusu buraya gelecek.</div>
+            <button class="close-btn" @click="closeModal">×</button>
+          </template>
+          <template v-else-if="activeModal === 'notifications'">
+            <div style="padding:24px;">Bildirimler buraya gelecek.</div>
+            <button class="close-btn" @click="closeModal">×</button>
+          </template>
+        </div>
       </div>
       <main>
         <InstagramPost
@@ -30,32 +52,22 @@
 import AppNavbar from './components/Navbar.vue'
 import LoginRegister from './components/LoginRegister.vue'
 import InstagramPost from './components/Post.vue'
+import AddPost from './components/AddPost.vue'
 
 export default {
-  name: 'App',
-  components: { AppNavbar, LoginRegister, InstagramPost },
+  components: { AppNavbar, LoginRegister, InstagramPost, AddPost },
   data() {
     return {
       isDark: false,
       currentUser: localStorage.getItem('currentUser') || null,
-      showSearch: false,
+      activeModal: null,
       searchQuery: '',
-      posts: [
-        {
-          id: 1,
-          username: 'kullanici1',
-          image: 'https://picsum.photos/400/300?random=1',
-          caption: 'İlk gönderi!'
-        },
-        {
-          id: 2,
-          username: 'kullanici2',
-          image: 'https://picsum.photos/400/300?random=2',
-          caption: 'Merhaba Vue!'
-        }
-      ],
+      posts: JSON.parse(localStorage.getItem('posts') || '[]'),
       filteredPosts: []
     }
+  },
+  created() {
+    this.filteredPosts = this.posts
   },
   watch: {
     isDark(newVal) {
@@ -64,20 +76,30 @@ export default {
       } else {
         document.body.classList.remove('dark-mode')
       }
+    },
+    posts: {
+      handler(newPosts) {
+        localStorage.setItem('posts', JSON.stringify(newPosts))
+        this.filterPosts()
+      },
+      deep: true
     }
-  },
-  created() {
-    this.filteredPosts = this.posts
-  },
-  mounted() {
-    window.addEventListener('beforeunload', this.logoutOnLeave)
-  },
-  beforeUnmount() {
-    window.removeEventListener('beforeunload', this.logoutOnLeave)
   },
   methods: {
     onLogin(username) {
       this.currentUser = username
+    },
+    openModal(type) {
+      this.activeModal = type
+    },
+    closeModal() {
+      this.activeModal = null
+      this.searchQuery = ''
+      this.filteredPosts = this.posts
+    },
+    handleAddPostAndClose(newPost) {
+      this.posts.unshift(newPost)
+      this.closeModal()
     },
     filterPosts() {
       const q = this.searchQuery.trim().toLowerCase()
@@ -88,15 +110,6 @@ export default {
           post.username.toLowerCase().includes(q)
         )
       }
-    },
-    clearSearch() {
-      this.showSearch = false
-      this.searchQuery = ''
-      this.filteredPosts = this.posts
-    },
-    logoutOnLeave() {
-      localStorage.removeItem('currentUser')
-      this.currentUser = null
     },
     toggleDark() {
       this.isDark = !this.isDark
@@ -210,5 +223,65 @@ body.dark-mode .search-bar {
 }
 .close-btn:hover {
   color: #0095f6;
+}
+/* Modal stilleri */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 24px 16px 24px;
+  min-width: 320px;
+  max-width: 90vw;
+  position: relative;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+}
+.close-modal {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+}
+.close-modal:hover {
+  color: #0095f6;
+}
+.search-bar-modal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  background: #f5f6fa;
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  position: relative;
+}
+.search-bar-modal input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: inherit;
+  outline: none;
+}
+body.dark-mode .modal-content {
+  background: #23272f;
+  color: #f1f1f1;
+}
+body.dark-mode .search-bar-modal {
+  background: #23272f;
 }
 </style>
