@@ -50,7 +50,7 @@ export default {
   z-index: 10;
 }
 .logo-text {
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: #222;

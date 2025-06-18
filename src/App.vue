@@ -1,15 +1,17 @@
 <template>
-  <div id="app">
-      <AppNavbar />
-    <main>
-      <InstagramPost
-        v-for="post in posts"
-        :key="post.id"
-        :username="post.username"
-        :image="post.image"
-        :caption="post.caption"
-      />
-    </main>
+  <div>
+    <AppNavbar />
+    <div class="container">
+      <main>
+        <InstagramPost
+          v-for="post in posts"
+          :key="post.id"
+          :username="post.username"
+          :image="post.image"
+          :caption="post.caption"
+        />
+      </main>
+    </div>
   </div>
 </template>
 
@@ -47,7 +49,7 @@ body {
   font-family: 'Segoe UI', Arial, sans-serif;
   background: #fafafa;
 }
-#app {
+.container {
   max-width: 900px; 
   margin: 40px auto;
   background: #fff;
