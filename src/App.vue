@@ -284,4 +284,59 @@ body.dark-mode .modal-content {
 body.dark-mode .search-bar-modal {
   background: #23272f;
 }
+.logo-text {
+  display: inline-block;
+  width: 13ch;
+  min-width: 2.5ch;
+  position: relative;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 1px;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: color 0.2s;
+  overflow: hidden;
+  line-height: 1.2;
+}
+.logo-stack {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 2.4em;
+}
+.logo-fade {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.98);
+  transition: opacity 0.35s cubic-bezier(.4,2,.6,1), transform 0.35s cubic-bezier(.4,2,.6,1);
+  white-space: nowrap;
+  pointer-events: none;
+  text-align: left;
+}
+.logo-fade.visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+  pointer-events: auto;
+}
+.logo-gradient {
+  background: linear-gradient(270deg, #ff6a00, #ee0979, #00c3ff, #43e97b, #ff6a00);
+  background-size: 800% 800%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 3s ease-in-out infinite;
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+body.dark-mode .logo-text {
+  color: #f1f1f1;
+}
 </style>
