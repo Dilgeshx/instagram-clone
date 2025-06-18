@@ -21,6 +21,7 @@ export default {
   border-radius: 8px;
   background: #fff;
   overflow: hidden;
+  transition: background 0.2s, border 0.2s;
 }
 .post-header {
   padding: 12px;
@@ -37,5 +38,15 @@ export default {
 }
 .username {
   color: #262626;
+}
+
+/* Dark mode için */
+body.dark-mode .post {
+  background: #23272f;
+  border: 1px solid #333;
+}
+body.dark-mode .caption,
+body.dark-mode .username {
+  color: #f1f1f1;
 }
 </style>

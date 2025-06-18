@@ -4,7 +4,7 @@
       <span class="logo-text">dilgestagram</span>
     </div>
     <div class="navbar-right">
-      <button class="icon-btn" title="Ara">
+      <button class="icon-btn" title="Ara" @click="$emit('toggle-search')">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="7"/>
           <line x1="18" y1="18" x2="15.5" y2="15.5"/>
@@ -22,13 +22,25 @@
           <polyline points="3 7 12 13 21 7" />
         </svg>
       </button>
+      <button class="icon-btn" title="Dark Mode" @click="$emit('toggle-dark')">
+        <svg v-if="!isDark" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+        </svg>
+      </button>
     </div>
   </nav>
 </template>
 
 <script>
 export default {
-  name: 'AppNavbar'
+  name: 'AppNavbar',
+  props: {
+    isDark: Boolean
+  }
 }
 </script>
 
