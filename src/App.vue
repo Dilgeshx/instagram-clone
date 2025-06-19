@@ -9,7 +9,7 @@
     />
     <LoginRegister v-else @login="onLogin" />
     <div v-if="currentUser" class="container">
-      <!-- Modal -->
+      
       <div v-if="activeModal" class="modal-overlay" @click.self="closeModal">
         <div class="modal-content">
           <template v-if="activeModal === 'addPost'">
