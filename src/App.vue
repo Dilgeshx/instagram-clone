@@ -1,8 +1,9 @@
 <template>
   <div>
+    <RainEffect :active="theme==='rain'" />
     <AppNavbar
-      :isDark="isDark"
-      @toggle-dark="toggleDark"
+      :theme="theme"
+      @toggle-theme="toggleTheme"
       @open-modal="openModal"
       v-if="currentUser"
     />
@@ -64,12 +65,13 @@ import LoginRegister from './components/LoginRegister.vue'
 import InstagramPost from './components/Post.vue'
 import AddPost from './components/AddPost.vue'
 import PostBox from './components/PostBox.vue'
+import RainEffect from './components/RainEffect.vue'
 
 export default {
-  components: { AppNavbar, LoginRegister, InstagramPost, AddPost, PostBox },
+  components: { AppNavbar, LoginRegister, InstagramPost, AddPost, PostBox, RainEffect },
   data() {
     return {
-      isDark: false,
+      theme: 'light', // 'light', 'dark', 'rain'
       currentUser: localStorage.getItem('currentUser') || null,
       activeModal: null,
       searchQuery: '',
@@ -82,11 +84,12 @@ export default {
     this.filteredPosts = this.posts
   },
   watch: {
-    isDark(newVal) {
-      if (newVal) {
+    theme(newVal) {
+      document.body.classList.remove('dark-mode', 'rain-mode')
+      if (newVal === 'dark') {
         document.body.classList.add('dark-mode')
-      } else {
-        document.body.classList.remove('dark-mode')
+      } else if (newVal === 'rain') {
+        document.body.classList.add('rain-mode')
       }
     },
     posts: {
@@ -128,6 +131,11 @@ export default {
     },
     toggleDark() {
       this.isDark = !this.isDark
+    },
+    toggleTheme() {
+      if (this.theme === 'light') this.theme = 'dark'
+      else if (this.theme === 'dark') this.theme = 'rain'
+      else this.theme = 'light'
     }
   }
 }
@@ -386,5 +394,24 @@ body.dark-mode .logo-text {
 }
 body.dark-mode .empty-notification {
   color: #aaa;
+}
+.rain-mode {
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+  color: #333;
+}
+.rain-mode .container {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+}
+body.rain-mode {
+  background: #e3f2fd !important;
+}
+body.rain-mode .container,
+body.rain-mode .navbar,
+body.rain-mode .post,
+body.rain-mode .add-post,
+body.rain-mode .post-box {
+  background: #f5fafd !important;
+  color: #222 !important;
 }
 </style>

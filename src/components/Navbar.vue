@@ -3,16 +3,8 @@
     <div class="navbar-left">
       <span class="logo-text" @mouseenter="hover = true" @mouseleave="hover = false">
         <span class="logo-stack">
-          <span
-            class="logo-fade logo-gradient"
-            :class="{ visible: !hover }"
-            aria-hidden="hover"
-          >ds</span>
-          <span
-            class="logo-fade"
-            :class="{ visible: hover }"
-            aria-hidden="!hover"
-          >dilgestagram</span>
+          <span class="logo-fade logo-gradient" :class="{ visible: !hover }">ds</span>
+          <span class="logo-fade" :class="{ visible: hover }">dilgestagram</span>
         </span>
       </span>
     </div>
@@ -21,12 +13,6 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="7"/>
           <line x1="18" y1="18" x2="15.5" y2="15.5"/>
-        </svg>
-      </button>
-      <button class="icon-btn" title="Gönderi Ekle" @click="$emit('open-modal', 'addPost')">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"/>
-          <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
       </button>
       <button class="icon-btn" title="DM" @click="$emit('open-modal', 'dm')">
@@ -41,13 +27,20 @@
           <path d="M13.73 21a2 2 0 01-3.46 0"/>
         </svg>
       </button>
-      <button class="icon-btn" title="Dark Mode" @click="$emit('toggle-dark')">
-        <svg v-if="!isDark" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <button class="icon-btn" title="Tema" @click="$emit('toggle-theme')">
+        <svg v-if="theme==='light'" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <circle cx="12" cy="12" r="5"/>
           <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
         </svg>
-        <svg v-else xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg v-else-if="theme==='dark'" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2196f3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 16a5 5 0 0 1 9.9-1H18a4 4 0 1 0-1-7.9" stroke="#222"/>
+          <path d="M6 16h12" stroke="#222"/>
+          <line x1="8" y1="18" x2="8" y2="22"/>
+          <line x1="12" y1="18" x2="12" y2="22"/>
+          <line x1="16" y1="18" x2="16" y2="22"/>
         </svg>
       </button>
     </div>
@@ -58,7 +51,8 @@
 export default {
   name: 'AppNavbar',
   props: {
-    isDark: Boolean
+    isDark: Boolean,
+    theme: String
   },
   data() {
     return {

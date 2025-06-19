@@ -7,6 +7,7 @@
       rows="2"
       maxlength="2200"
       required
+      @keydown.enter.prevent="onEnter"
     ></textarea>
     <div class="post-actions">
       <label class="photo-btn" title="Fotoğraf ekle">
@@ -67,6 +68,13 @@ export default {
       this.image = null
       this.error = ''
       this.$el.querySelector('input[type="file"]').value = ''
+    },
+    onEnter(e) {
+      if (e.shiftKey) {
+        this.text += '\n'
+      } else {
+        this.submitPost()
+      }
     }
   }
 }
