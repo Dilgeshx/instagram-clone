@@ -274,6 +274,8 @@ export default {
   max-width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .dm-message {
   max-width: 74%;
@@ -288,6 +290,7 @@ export default {
 }
 .dm-message.user {
   align-self: flex-end;
+  margin-left: auto;
   background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
   color: #fff;
   border-bottom-right-radius: 6px;
