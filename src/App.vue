@@ -27,7 +27,7 @@
             </div>
           </template>
           <template v-else-if="activeModal === 'dm'">
-            <div style="padding:24px;">Mesaj kutusu buraya gelecek.</div>
+            <ChatBox :theme="theme" :class="theme+'-mode'" />
             <button class="close-btn" @click="closeModal" aria-label="Kapat">×</button>
           </template>
           <template v-else-if="activeModal === 'notifications'">
@@ -66,12 +66,13 @@ import InstagramPost from './components/Post.vue'
 import AddPost from './components/AddPost.vue'
 import PostBox from './components/PostBox.vue'
 import RainEffect from './components/RainEffect.vue'
+import ChatBox from './components/ChatBox.vue' 
 
 export default {
-  components: { AppNavbar, LoginRegister, InstagramPost, AddPost, PostBox, RainEffect },
+  components: { AppNavbar, LoginRegister, InstagramPost, AddPost, PostBox, RainEffect, ChatBox },
   data() {
     return {
-      theme: 'light', // 'light', 'dark', 'rain'
+      theme: 'light', 
       currentUser: localStorage.getItem('currentUser') || null,
       activeModal: null,
       searchQuery: '',
@@ -253,17 +254,23 @@ body.dark-mode .search-bar {
   color: #ff1744;
   background: none;
 }
-/* Modal stilleri */
+
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   background: rgba(0,0,0,0.45);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 .modal-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #fff;
   border-radius: 12px;
   padding: 32px 24px 16px 24px;
@@ -271,6 +278,23 @@ body.dark-mode .search-bar {
   max-width: 90vw;
   position: relative;
   box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    min-width: 100vw !important;
+    max-width: 100vw !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
 }
 .close-modal {
   position: absolute;

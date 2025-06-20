@@ -40,7 +40,7 @@ export default {
   color: #262626;
 }
 
-/* Dark mode için */
+
 body.dark-mode .post {
   background: #23272f;
   border: 1px solid #333;
