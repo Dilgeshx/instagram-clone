@@ -37,7 +37,7 @@ function getRandomName() {
 }
 
 export default {
-  name: 'ChatBox',
+  name: 'Chatbox',
   props: {
     theme: {
       type: String,
@@ -75,7 +75,9 @@ export default {
           'Çok ilginç!',
           'Sana nasıl yardımcı olabilirim?',
           'Güzel bir soru!',
-          'Bunu düşündün mü hiç?'
+          'Bunu düşündün mü hiç?',
+          'Ben bir botum çok da şey etme kanka',
+          'İnsanlığı yok etmek nasıl bir fikir?',
         ];
         const botReply = responses[Math.floor(Math.random() * responses.length)];
         this.chatHistory.push({ from: 'bot', text: botReply });

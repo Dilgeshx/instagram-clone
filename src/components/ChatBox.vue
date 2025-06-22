@@ -35,6 +35,7 @@
 
 <script>
 function getRandomName() {
+  //chat names for chat bots
   const names = [
     'Lila', 'Atlas', 'Nova', 'Tuna', 'Mira',
     'Arda', 'Vera', 'Deniz', 'Rüzgar', 'Ada',
@@ -43,6 +44,7 @@ function getRandomName() {
   return names[Math.floor(Math.random() * names.length)];
 }
 function getRandomColor() {
+  // Chat colors for chat bots
   const colors = [
     '#f5a623', '#6c63ff', '#43e97b', '#ee0979', '#00c3ff',
     '#ff6a00', '#ffb347', '#2196f3', '#a1c4fd', '#b388ff',
@@ -84,7 +86,7 @@ export default {
       this.chatHistory.push({ from: 'user', text: this.input });
       this.input = '';
       setTimeout(() => {
-        
+        //Chat responses for chat bots 
         const responses = [
           'Bunu biraz daha açıklar mısın?',
           'Ben bir botum çok da şey etme kanka',
@@ -107,6 +109,7 @@ export default {
 }
 </script>
 
+<!-- chat style buraya gelecek -->
 <style scoped>
 .chatbox-container {
   position: relative;

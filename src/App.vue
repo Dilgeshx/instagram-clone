@@ -3,73 +3,37 @@
     <RainEffect :active="theme==='rain'" />
     <AppNavbar
       :theme="theme"
+      :current-user="currentUser"
       @toggle-theme="toggleTheme"
       @open-modal="openModal"
+      @edit-profile="() => $router.push('/profile-edit')"
       v-if="currentUser"
     />
     <LoginRegister v-else @login="onLogin" />
-    <div v-if="currentUser" class="container">
-      
-      <div v-if="activeModal" class="modal-overlay" @click.self="closeModal">
-        <div class="modal-content">
-          <template v-if="activeModal === 'addPost'">
-            <AddPost :currentUser="currentUser" @add-post="handleAddPostAndClose" />
-          </template>
-          <template v-else-if="activeModal === 'search'">
-            <div class="search-bar-modal">
-              <input
-                v-model="searchQuery"
-                placeholder="Kullanıcı adına göre ara..."
-                @input="filterPosts"
-                autofocus
-              />
-              <button class="close-btn" @click="closeModal" aria-label="Kapat">×</button>
-            </div>
-          </template>
-          <template v-else-if="activeModal === 'dm'">
-            <ChatBox :theme="theme" :class="theme+'-mode'" />
-            <button class="close-btn" @click="closeModal" aria-label="Kapat">×</button>
-          </template>
-          <template v-else-if="activeModal === 'notifications'">
-            <div class="notifications-modal">
-              <div v-if="notifications.length === 0" class="empty-notification">
-                Henüz bir bildirim yok.
-              </div>
-              <ul v-else>
-                <li v-for="(notif, i) in notifications" :key="i">
-                  {{ notif }}
-                </li>
-              </ul>
-              <button class="close-btn" @click="closeModal" aria-label="Kapat">×</button>
-            </div>
-          </template>
-        </div>
-      </div>
-      <PostBox :currentUser="currentUser" @add-post="handleAddPost" />
-      <main>
-        <InstagramPost
-          v-for="post in filteredPosts"
-          :key="post.id"
-          :username="post.username"
-          :image="post.image"
-          :caption="post.caption"
-        />
-      </main>
-    </div>
+    <router-view
+      v-if="currentUser"
+      :current-user="currentUser"
+      :theme="theme"
+      :active-modal="activeModal"
+      :close-modal="closeModal"
+      :handle-add-post="handleAddPost"
+      :handle-add-post-and-close="handleAddPostAndClose"
+      :search-query="searchQuery"
+      :filter-posts="filterPosts"
+      :filtered-posts="filteredPosts"
+      :notifications="notifications"
+    />
   </div>
 </template>
 
 <script>
 import AppNavbar from './components/Navbar.vue'
 import LoginRegister from './components/LoginRegister.vue'
-import InstagramPost from './components/Post.vue'
-import AddPost from './components/AddPost.vue'
-import PostBox from './components/PostBox.vue'
 import RainEffect from './components/RainEffect.vue'
-import ChatBox from './components/ChatBox.vue' 
+
 
 export default {
-  components: { AppNavbar, LoginRegister, InstagramPost, AddPost, PostBox, RainEffect, ChatBox },
+  components: { AppNavbar, LoginRegister, RainEffect },
   data() {
     return {
       theme: 'light', 

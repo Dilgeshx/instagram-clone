@@ -1,12 +1,12 @@
 <template>
   <nav class="navbar">
     <div class="navbar-left">
-      <span class="logo-text" @mouseenter="hover = true" @mouseleave="hover = false">
+      <router-link to="/" class="logo-text" @mouseenter="hover = true" @mouseleave="hover = false">
         <span class="logo-stack">
           <span class="logo-fade logo-gradient" :class="{ visible: !hover }">ds</span>
           <span class="logo-fade" :class="{ visible: hover }">dilgestagram</span>
         </span>
-      </span>
+      </router-link>
     </div>
     <div class="navbar-right">
       <button class="icon-btn" title="Ara" @click="$emit('open-modal', 'search')">
@@ -43,6 +43,12 @@
           <line x1="16" y1="18" x2="16" y2="22"/>
         </svg>
       </button>
+      <button class="icon-btn" title="Profil" @click="$router.push('/profile-edit')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M2 20c0-4 8-6 10-6s10 2 10 6" />
+        </svg>
+      </button>
     </div>
   </nav>
 </template>
@@ -52,17 +58,83 @@ export default {
   name: 'AppNavbar',
   props: {
     isDark: Boolean,
-    theme: String
+    theme: String,
+    currentUser: Object
   },
   data() {
     return {
-      hover: false
+      hover: false,
+      showProfileMenu: false
+    }
+  },
+  methods: {
+    toggleProfileMenu() {
+      this.showProfileMenu = !this.showProfileMenu;
     }
   }
 }
 </script>
 
 <style scoped>
+.profile-photo-wrapper {
+  display: inline-block;
+  position: relative;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.profile-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #2196f3;
+  object-fit: cover;
+  background: #eee;
+  transition: box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-photo.user-icon {
+  padding: 4px;
+  background: #f7faff;
+}
+.profile-photo:hover {
+  box-shadow: 0 0 0 2px #90caf9;
+}
+.profile-menu-overlay {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+  border-radius: 12px;
+  padding: 18px 20px 14px 20px;
+  min-width: 170px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  animation: fadeInMenu 0.18s;
+}
+@keyframes fadeInMenu {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.edit-profile-btn {
+  padding: 10px 16px;
+  background: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.18s;
+  margin-top: 2px;
+}
+.edit-profile-btn:hover {
+  background: #1976d2;
+}
+
 .navbar {
   width: 100vw;
   min-width: 320px;
