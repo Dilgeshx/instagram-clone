@@ -1,5 +1,6 @@
 <template>
   <div class="chatbox-container" :class="themeClass">
+    <canvas ref="particlesBg" class="particles-bg"></canvas>
     <div v-if="!selectedBot" class="chatbox-watermark">Bu özellik henüz test aşamasındadır</div>
     <div v-if="!selectedBot" class="bot-list">
       <h2 class="bot-list-title">Sohbet başlatmak için bir asistan seçin</h2>
@@ -71,8 +72,18 @@ export default {
       bots: Array.from({ length: 3 }, () => ({ name: getRandomName(), color: getRandomColor() })), 
       selectedBot: null,
       chatHistory: [],
-      input: ''
+      input: '',
+      particleAnimation: null,
+      particles: []
     }
+  },
+  mounted() {
+    this.initParticles();
+    window.addEventListener('resize', this.resizeParticlesCanvas);
+  },
+  beforeUnmount() {
+    cancelAnimationFrame(this.particleAnimation);
+    window.removeEventListener('resize', this.resizeParticlesCanvas);
   },
   methods: {
     selectBot(bot) {
@@ -104,6 +115,62 @@ export default {
       this.$nextTick(() => {
         this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
       });
+    },
+    initParticles() {
+      const canvas = this.$refs.particlesBg;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      this.resizeParticlesCanvas();
+      // Partikül ayarları
+      const count = Math.floor((canvas.width * canvas.height) / 6000);
+      this.particles = Array.from({ length: count }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: 18 + Math.random() * 22,
+        dx: (Math.random() - 0.5) * 0.18,
+        dy: (Math.random() - 0.5) * 0.18,
+        opacity: 0.10 + Math.random() * 0.25
+      }));
+      const drawParticles = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const p of this.particles) {
+          const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+          grad.addColorStop(0, `rgba(255,255,255,${p.opacity})`);
+          grad.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+          ctx.fillStyle = grad;
+          ctx.fill();
+          // Hareket
+          p.x += p.dx;
+          p.y += p.dy;
+          // Kenardan çıkarsa geri döndür
+          if (p.x < -p.r) p.x = canvas.width + p.r;
+          if (p.x > canvas.width + p.r) p.x = -p.r;
+          if (p.y < -p.r) p.y = canvas.height + p.r;
+          if (p.y > canvas.height + p.r) p.y = -p.r;
+        }
+        this.particleAnimation = requestAnimationFrame(drawParticles);
+      };
+      drawParticles();
+    },
+    resizeParticlesCanvas() {
+      const canvas = this.$refs.particlesBg;
+      if (!canvas) return;
+      canvas.width = this.$el.offsetWidth;
+      canvas.height = this.$el.offsetHeight;
+      // Partikülleri yeniden oluştur
+      if (this.particles && this.particles.length) {
+        const count = Math.floor((canvas.width * canvas.height) / 6000);
+        this.particles = Array.from({ length: count }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: 18 + Math.random() * 22,
+          dx: (Math.random() - 0.5) * 0.18,
+          dy: (Math.random() - 0.5) * 0.18,
+          opacity: 0.10 + Math.random() * 0.25
+        }));
+      }
     }
   }
 }
@@ -118,6 +185,26 @@ export default {
   min-width: 0;
   min-height: 0;
   height: 90vh;
+  background: #111;
+  overflow: hidden;
+}
+.particles-bg {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+/* Diğer içerikler partikülün üstünde kalsın */
+.chatbox-watermark,
+.bot-list,
+.dm-box {
+  position: relative;
+  z-index: 1;
+}
+.chatbox-container {
   margin: 0 auto;
   border-radius: 16px;
   background: var(--dm-bg, #fff);
