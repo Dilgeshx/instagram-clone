@@ -51,7 +51,7 @@ export default {
       if (user) {
         this.message = 'Başarıyla giriş yaptınız!';
         this.messageType = 'success';
-        // Giriş başarılı ise burada yönlendirme yapılabilir
+        this.$emit('login', this.username); // App.vue ana bileşene bildir
       } else {
         this.message = 'Kullanıcı adı veya şifre yanlış.';
         this.messageType = 'error';
