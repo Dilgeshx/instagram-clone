@@ -43,12 +43,16 @@
           <line x1="16" y1="18" x2="16" y2="22"/>
         </svg>
       </button>
-      <button class="icon-btn" title="Profil" @click="$router.push('/profile-edit')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="profile-photo-wrapper" @click="toggleProfileMenu">
+        <svg class="profile-photo user-icon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="8" r="4" />
           <path d="M2 20c0-4 8-6 10-6s10 2 10 6" />
         </svg>
-      </button>
+        <div v-if="showProfileMenu" class="profile-menu-overlay">
+          <button class="edit-profile-btn" @click="$router.push('/profile-edit'); showProfileMenu=false">Profilim</button>
+          <button class="edit-profile-btn" style="background:#e53935;margin-top:8px" @click="$emit('logout'); showProfileMenu=false">Çıkış Yap</button>
+        </div>
+      </div>
     </div>
   </nav>
 </template>
@@ -77,9 +81,17 @@ export default {
 
 <style scoped>
 .profile-photo-wrapper {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  margin-left: 12px;
+  margin-left: 0;
+  padding: 4px;
+  height: 36px;
+  width: 36px;
+  background: none;
+  border: none;
+  box-sizing: border-box;
   cursor: pointer;
 }
 .profile-photo {
@@ -95,8 +107,17 @@ export default {
   justify-content: center;
 }
 .profile-photo.user-icon {
-  padding: 4px;
-  background: #f7faff;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
 .profile-photo:hover {
   box-shadow: 0 0 0 2px #90caf9;
@@ -105,15 +126,15 @@ export default {
   position: absolute;
   top: 110%;
   right: 0;
-  background: rgba(255,255,255,0.92);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+  background: #fff;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
   border-radius: 12px;
-  padding: 18px 20px 14px 20px;
+  padding: 14px 0 10px 0;
   min-width: 170px;
   z-index: 999;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   animation: fadeInMenu 0.18s;
 }
 @keyframes fadeInMenu {
@@ -121,15 +142,28 @@ export default {
   to { opacity: 1; transform: translateY(0); }
 }
 .edit-profile-btn {
-  padding: 10px 16px;
-  background: #2196f3;
+  width: 140px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 5px 0 0 0;
+  background: #111;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 15px;
+  border-radius: 0;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.18s;
-  margin-top: 2px;
+  transition: background 0.18s, color 0.18s;
+  box-shadow: none;
+  text-align: center;
+}
+.edit-profile-btn:hover {
+  background: #222;
+  color: #fff;
 }
 .edit-profile-btn:hover {
   background: #1976d2;

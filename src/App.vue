@@ -7,6 +7,7 @@
       @toggle-theme="toggleTheme"
       @open-modal="openModal"
       @edit-profile="() => $router.push('/profile-edit')"
+      @logout="logout"
       v-if="currentUser"
     />
     <LoginRegister v-else @login="onLogin" />
@@ -68,6 +69,11 @@ export default {
   methods: {
     onLogin(username) {
       this.currentUser = username
+      localStorage.setItem('currentUser', username)
+    },
+    logout() {
+      this.currentUser = null
+      localStorage.removeItem('currentUser')
     },
     openModal(type) {
       this.activeModal = type

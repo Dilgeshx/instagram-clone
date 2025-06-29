@@ -103,7 +103,7 @@ export default {
   background-size:200% 200%;
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
-  animation:gradient-move 3s ease-in-out infinite;
+  animation:gradient-move 16s ease-in-out infinite;
   user-select:none
 }
 @keyframes gradient-move{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
@@ -153,7 +153,7 @@ input:focus{border-color:#dc2743;background:#fff;box-shadow:0 0 0 2px #dc274344;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
-  animation: gradientMove 3s ease-in-out infinite;
+  animation: gradientMove 10s ease-in-out infinite;
 }
 @keyframes gradientMove {
   0% { background-position: 0% 50%; }
